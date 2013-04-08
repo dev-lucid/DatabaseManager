@@ -17,7 +17,8 @@ class dbm
 			'password'=>$password,
 			'port'=>$port,
 			'connection'=>null,
-			'hooks'=>array()
+			'hooks'=>array(),
+			'log_hook'=>null,
 		);
 		
 		include(__DIR__.'/dbm_collection.php');
@@ -57,6 +58,15 @@ class dbm
 	
 	public static function model($name)
 	{
+	}
+	
+	function log($string_to_log)
+	{
+		global $__dbm;
+		if(!is_null($__dbm['log_hook']))
+		{
+			$__dbm['log_hook']('DBM: '.$string_to_log);
+		}
 	}
 }
 
