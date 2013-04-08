@@ -17,6 +17,7 @@ class dbm
 			'password'=>$password,
 			'port'=>$port,
 			'connection'=>null,
+			'hooks'=>array()
 		);
 		
 		include(__DIR__.'/dbm_model_collection.php');
