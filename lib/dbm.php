@@ -20,24 +20,34 @@ class dbm
 			'hooks'=>array()
 		);
 		
-		include(__DIR__.'/dbm_model_collection.php');
+		include(__DIR__.'/dbm_collection.php');
 		include(__DIR__.'/dbm_model_sql_builder.php');
 		include(__DIR__.'/dbm_model_sql_clauses.php');
 		include(__DIR__.'/dbm_field.php');
 		include(__DIR__.'/dbm_model.php');
 		
-		$adaptor = __DIR__.'/adaptors/'.$type.'.php';
-		$adaptor_class = 'dbm_adaptor_'.$type;
-		if(file_exists($adaptor))
+		if($__dbm['type'] != '')
 		{
-			include($adaptor);
+			$adaptor = __DIR__.'/adaptors/'.$type.'.php';
+			$adaptor_class = 'dbm_adaptor_'.$type;
+			if(file_exists($adaptor))
+			{
+				include($adaptor);
+				if(class_exists($adaptor_class))
+				{
+					$__dbm['connection'] = new $adaptor_class();
+				}
+				else
+				{
+					throw new Exception('DBM: Adaptor loaded, but properly named class was not found. Looked for '.$adaptor_class);
+				}
+			}
+			else
+			{
+				throw new Exception('DBM: Could not find db adaptor for type '.$type);
+			}
 		}
-		else
-		{
-			throw new Exception('Could not find db adaptor for type '.$type);
-		}
-		
-		$__dbm['connection'] = new $adaptor_class();
+	
 	}
 	
 	public static function query($sql)
