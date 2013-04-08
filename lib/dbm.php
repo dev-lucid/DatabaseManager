@@ -68,6 +68,10 @@ class dbm
 			$__dbm['log_hook']('DBM: '.$string_to_log);
 		}
 	}
+	
+	function deinit()
+	{
+	}
 }
 
 ?>
