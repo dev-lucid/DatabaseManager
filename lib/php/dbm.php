@@ -4,22 +4,36 @@
 # license that can be found in the LICENSE file.
 
 global $__dbm;
+$__dbm = array(
+	'type'=>'',
+	'host'=>'',
+	'username'=>'',
+	'password'=>'',
+	'port'=>'',
+	'connection'=>null,
+	'hooks'=>array(),
+	'log_hook'=>null,
+);
 
 class dbm
 {
-	public static function init($type=null,$host=null,$username=null,$password=null,$port=null)
+	
+	public static function init($config = array())
 	{
 		global $__dbm;
-		$__dbm = array(
-			'type'=>$type,
-			'host'=>$host,
-			'username'=>$username,
-			'password'=>$password,
-			'port'=>$port,
-			'connection'=>null,
-			'hooks'=>array(),
-			'log_hook'=>null,
-		);
+		
+		foreach($config as $key=>$value)
+		{
+			if(is_array($value))
+			{
+				foreach($value as $subkey=>$subvalue)
+				{
+					$__dbm[$key][$subkey] = $subvalue;
+				}
+			}
+			else
+				$__dbm[$key] = $value;
+		}	
 		
 		include(__DIR__.'/dbm_collection.php');
 		include(__DIR__.'/dbm_model_sql_builder.php');
