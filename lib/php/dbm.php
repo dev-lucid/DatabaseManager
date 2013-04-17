@@ -12,12 +12,27 @@ $__dbm = array(
 	'port'=>'',
 	'connection'=>null,
 	'hooks'=>array(),
-	'log_hook'=>null,
 );
 
 class dbm
 {
+	function log($to_write)
+	{
+		global $__dbm;
+		if(isset($__dbm['hooks']['log']))
+		{
+			$to_write=(is_object($to_write) || is_array($to_write))?print_r($to_write,true):$to_write;
+			$__dbm['hooks']['log']('DBM: '.$to_write);
+		}
+	}
 	
+	function call_hook($hook,$p0=null,$p1=null,$p2=null,$p3=null,$p4=null,$p5=null,$p6=null)
+	{
+		global $__dbm;
+		if(isset($__dbm['hooks'][$hook]))
+			$__dbm['hooks'][$hook]($p0,$p1,$p2,$p3,$p4,$p5,$p6);
+	}
+		
 	public static function init($config = array())
 	{
 		global $__dbm;
@@ -28,8 +43,12 @@ class dbm
 			{
 				foreach($value as $subkey=>$subvalue)
 				{
-					$__dbm[$key][$subkey] = $subvalue;
+					if(is_numeric($subkey))
+						$__dbm[$key][] = $subvalue;
+					else
+						$__dbm[$key][$subkey] = $subvalue;
 				}
+
 			}
 			else
 				$__dbm[$key] = $value;
@@ -65,25 +84,16 @@ class dbm
 	
 	}
 	
+	public static function deinit()
+	{
+	}
+	
 	public static function query($sql)
 	{
 		return $__dbm['connection']->query($sql);
 	}
 	
 	public static function model($name)
-	{
-	}
-	
-	function log($string_to_log)
-	{
-		global $__dbm;
-		if(!is_null($__dbm['log_hook']))
-		{
-			$__dbm['log_hook']('DBM: '.$string_to_log);
-		}
-	}
-	
-	function deinit()
 	{
 	}
 }
