@@ -18,7 +18,7 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 		
 		# these contain the data/metadata for the model
 		$this->__data = array();
-		$this->__records = array();
+		$this->__records = null;
 		$this->__original_data = array();
 		$this->__fields = array();
 		$this->__field_index = array();

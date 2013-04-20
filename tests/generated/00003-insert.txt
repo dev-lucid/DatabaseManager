@@ -1,0 +1,96 @@
+Array
+(
+    [table1_id] => 1
+    [table1_vc1] => a
+    [table1_vc2] => A
+    [table1_i1] => 0
+)
+
+Array
+(
+    [table1_id] => 2
+    [table1_vc1] => b
+    [table1_vc2] => B
+    [table1_i1] => 1
+)
+
+Array
+(
+    [table1_id] => 3
+    [table1_vc1] => c
+    [table1_vc2] => C
+    [table1_i1] => 0
+)
+
+Array
+(
+    [table1_id] => 4
+    [table1_vc1] => d
+    [table1_vc2] => D
+    [table1_i1] => 1
+)
+
+Array
+(
+    [table1_id] => 5
+    [table1_vc1] => e
+    [table1_vc2] => E
+    [table1_i1] => 0
+)
+
+Array
+(
+    [table1_id] => 6
+    [table1_vc1] => f
+    [table1_vc2] => F
+    [table1_i1] => 1
+)
+
+Array
+(
+    [table1_id] => 7
+    [table1_vc1] => g
+    [table1_vc2] => G
+    [table1_i1] => 0
+)
+
+Array
+(
+    [table1_id] => 8
+    [table1_vc1] => h
+    [table1_vc2] => H
+    [table1_i1] => 1
+)
+
+Array
+(
+    [table1_id] => 9
+    [table1_vc1] => i
+    [table1_vc2] => I
+    [table1_i1] => 0
+)
+
+Array
+(
+    [table1_id] => 10
+    [table1_vc1] => j
+    [table1_vc2] => J
+    [table1_i1] => 1
+)
+
+Array
+(
+    [table1_id] => 11
+    [table1_vc1] => k
+    [table1_vc2] => K
+    [table1_i1] => 0
+)
+
+Array
+(
+    [table1_id] => 12
+    [table1_vc1] => l
+    [table1_vc2] => L
+    [table1_i1] => 1
+)
+

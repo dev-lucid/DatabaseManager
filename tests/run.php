@@ -22,6 +22,11 @@ foreach($files as $file)
 
 
 $fail_count = 0;
+echo('rebuilding database'.$nl);
+echo('mysql --user=dbm_testuser --password=dbm_testuser dbm_testdb < '.__DIR__.'/testdb.mysql.sql;'.$nl);
+shell_exec('mysql --user=dbm_testuser --password=dbm_testuser dbm_testdb < '.__DIR__.'/testdb.mysql.sql;');
+
+
 echo('Beginning test run'.$nl.' '.$nl);
 
 $files = glob($tests.'*');

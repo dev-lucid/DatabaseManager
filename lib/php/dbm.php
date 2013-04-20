@@ -59,17 +59,18 @@ class dbm
 		include(__DIR__.'/dbm_model_sql_clauses.php');
 		include(__DIR__.'/dbm_field.php');
 		include(__DIR__.'/dbm_model.php');
+		include(__DIR__.'/dbm_adaptor.php');
 		
 		if($__dbm['type'] != '')
 		{
-			$adaptor = __DIR__.'/adaptors/'.$type.'.php';
-			$adaptor_class = 'dbm_adaptor_'.$type;
+			$adaptor = __DIR__.'/adaptors/'.$__dbm['type'].'.php';
+			$adaptor_class = 'dbm_adaptor_'.$__dbm['type'];
 			if(file_exists($adaptor))
 			{
 				include($adaptor);
 				if(class_exists($adaptor_class))
 				{
-					$__dbm['connection'] = new $adaptor_class();
+					$adaptor_class::init();
 				}
 				else
 				{
@@ -78,8 +79,8 @@ class dbm
 			}
 			else
 			{
-				throw new Exception('DBM: Could not find db adaptor for type '.$type);
-			}
+				throw new Exception('DBM: Could not find db adaptor for type '.$__dbm['type']);
+			}			
 		}
 	
 	}
@@ -90,11 +91,14 @@ class dbm
 	
 	public static function query($sql)
 	{
+		global $__dbm;
 		return $__dbm['connection']->query($sql);
 	}
 	
 	public static function model($name)
 	{
+		$return = new dbm_model($name);
+		return $return;
 	}
 }
 

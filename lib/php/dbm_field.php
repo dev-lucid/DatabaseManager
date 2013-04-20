@@ -5,7 +5,14 @@
 
 class dbm_field
 {
-	
+	function __construct($name,$type,$size1,$size2,$default=null)
+	{
+		$this->name = $name;
+		$this->type = $type;
+		$this->size1 = $size1;
+		$this->size2 = $size2;
+		$this->default = $default;
+	}
 }
 
 ?>
