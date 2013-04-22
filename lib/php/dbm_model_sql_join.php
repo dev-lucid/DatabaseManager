@@ -36,7 +36,7 @@ class dbm_model_sql_join
 	
 	function build_join()
 	{
-		return ' '.$this->type.' join '.$this->table->__table.' on '.$this->conditions;
+		return "\n ".$this->type.' join '.$this->table->__table.' on '.$this->conditions;
 	}
 }
 

@@ -34,12 +34,14 @@ function mylogger($string)
 	global $nl;
 	echo($string.$nl);
 }
-#$__dbm['hooks']['log'] = 'mylogger';
+
+if(in_array('echolog',$argv))
+	$__dbm['hooks']['log'] = 'mylogger';
 
 
 $fail_count = 0;
 echo('rebuilding database'.$nl);
-echo('mysql --user='.$config['username'].' --password='.$config['password'].' '.$config['database'].' < '.__DIR__.'/testdb.mysql.sql;'.$nl);
+#echo('mysql --user='.$config['username'].' --password='.$config['password'].' '.$config['database'].' < '.__DIR__.'/testdb.mysql.sql;'.$nl);
 shell_exec('mysql --user='.$config['username'].' --password='.$config['password'].' '.$config['database'].' < '.__DIR__.'/testdb.mysql.sql;');
 
 echo('removing all existing models'.$nl);

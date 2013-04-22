@@ -1,0 +1,9 @@
+Array
+(
+    [table1_id] => 13
+    [table1_vc1] => test
+    [table1_vc2] => 
+    [table1_i1] => 
+    [__max_page] => 0
+)
+

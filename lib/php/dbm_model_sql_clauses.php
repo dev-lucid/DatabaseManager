@@ -114,7 +114,7 @@ class dbm_model_sql_clauses extends dbm_model_sql_builder
 		return $this;
 	}
 	
-	public function save($form_id='')
+	public function save()
 	{
 		if(
 			isset($this->__data[$this->__fields[0]->name])

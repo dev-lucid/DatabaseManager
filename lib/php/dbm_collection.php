@@ -12,6 +12,11 @@ class dbm_collection implements Iterator
 		return $this->__index;
 	}
 	
+	public function load()
+	{
+		return $this->next();
+	}
+	
 	public function next ( )
 	{
 		$this->__index++;
@@ -48,7 +53,7 @@ class dbm_collection implements Iterator
 		return ($this->__index  < $this->__records->num_rows);
 	}
 	
-	private function __load()
+	protected function __load()
 	{
 		$queries = $this->__build_select_query();
 		$this->__records = dbm::query($queries[0]);

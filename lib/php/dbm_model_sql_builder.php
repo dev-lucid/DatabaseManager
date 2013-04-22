@@ -14,8 +14,8 @@ class dbm_model_sql_builder extends dbm_collection
 		$paged_sql    .= $this->__build_field_list();
 		$max_page_sql .= 'count('.$this->__table.'.'.$this->__fields[0]->name.') as max_page';
 		
-		$paged_sql    .= ' from '.$this->__table;
-		$max_page_sql .= ' from '.$this->__table;
+		$paged_sql    .= "\n".' from '.$this->__table;
+		$max_page_sql .= "\n".' from '.$this->__table;
 		
 		foreach($this->__sql_joins as $join)
 		{
@@ -30,22 +30,26 @@ class dbm_model_sql_builder extends dbm_collection
 		$paged_sql    .= $this->__build_sorts();
 		$paged_sql    .= $this->__build_paging();
 		
-		dbm::log('sql built: '.$paged_sql);
 		return array($paged_sql,$max_page_sql);
 	}
 	
 	protected function __build_update_query()
 	{
+		global $__dbm;
+		
 		list($fields,$vals) = $this->__get_saveable_fields();
 		if(count($vals) == 0)
 			return false;
-		$vals = dbm_db::escape($vals);
+			
+		$final = array();
+		foreach($vals as $idx=>$val)
+			$final[$idx] = $__dbm['adaptor']::handle_format($val);
 	
 		$sql = 'update '.$this->__table.' set ';
 		$clauses = array();
 		for($i=0;$i<count($fields);$i++)
 		{
-			$clauses[] = $fields[$i].'='.$vals[$i];
+			$clauses[] = $fields[$i].'='.$final[$i];
 		}
 		$sql .= implode(',',$clauses);
 		$sql .= $this->__build_filters();
@@ -54,14 +58,19 @@ class dbm_model_sql_builder extends dbm_collection
 	
 	protected function __build_insert_query()
 	{
+		global $__dbm;
 		list($fields,$vals) = $this->__get_saveable_fields();
 		if(count($vals) == 0)
 			return false;
-		$vals = dbm_db::escape($vals);
+			
+		$final = array();
+		foreach($vals as $idx=>$val)
+			$final[$idx] = $__dbm['adaptor']::handle_format($val);
 		
-		$sql = 'insert into '.$this->__table.' ';
-		$sql .= '('.implode(',',$fields).') values ';
-		$sql .= '('.implode(',',$vals).');';
+		$sql = 'insert into '.$this->__table."\n";
+		$sql .= '('.implode(',',$fields).')'."\n";
+		$sql .= ' values '."\n";
+		$sql .= '('.implode(',',$final).');';
 		return $sql;
 	}
 	
@@ -76,7 +85,7 @@ class dbm_model_sql_builder extends dbm_collection
 		foreach($this->__sql_filters as $filter)
 			$filter_clauses[] = $filter->build_sql();
 		
-		return (count($filter_clauses) == 0)?'':' where '.implode(' and ',$filter_clauses);
+		return (count($filter_clauses) == 0)?'':"\n".' where '.implode("\n".' and ',$filter_clauses);
 	}
 
 	protected function __build_field_list()
@@ -96,18 +105,18 @@ class dbm_model_sql_builder extends dbm_collection
 	{
 		if(count($this->__sql_sorts) == 0)
 			return '';
-		return ' order by '.implode(',',$this->__sql_sorts);
+		return "\n".'order by '.implode(',',$this->__sql_sorts);
 	}
 	
 	protected function __build_paging()
 	{
 		if(!is_null($this->__sql_limit) && is_null($this->__sql_offset))
 		{
-			return ' limit '.$this->__sql_limit;
+			return "\n".'limit '.$this->__sql_limit;
 		}
 		else if(!is_null($this->__sql_limit) && !is_null($this->__sql_offset))
 		{
-			return ' limit '.$this->__sql_offset.','.$this->__sql_limit;
+			return "\n".'limit '.$this->__sql_offset.','.$this->__sql_limit;
 		}
 		return '';
 	}
