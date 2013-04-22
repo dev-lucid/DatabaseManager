@@ -16,6 +16,15 @@ $__dbm = array(
 	'hooks'=>array(),
 );
 
+include(__DIR__.'/dbm_collection.php');
+include(__DIR__.'/dbm_model_sql_builder.php');
+include(__DIR__.'/dbm_model_sql_clauses.php');
+include(__DIR__.'/dbm_field.php');
+include(__DIR__.'/dbm_model.php');
+include(__DIR__.'/dbm_adaptor.php');
+include(__DIR__.'/dbm_filter.php');
+include(__DIR__.'/dbm_model_sql_join.php');
+
 class dbm
 {
 	function log($to_write)
@@ -55,14 +64,6 @@ class dbm
 			else
 				$__dbm[$key] = $value;
 		}	
-		
-		include(__DIR__.'/dbm_collection.php');
-		include(__DIR__.'/dbm_model_sql_builder.php');
-		include(__DIR__.'/dbm_model_sql_clauses.php');
-		include(__DIR__.'/dbm_field.php');
-		include(__DIR__.'/dbm_model.php');
-		include(__DIR__.'/dbm_adaptor.php');
-		include(__DIR__.'/dbm_filter.php');
 		
 		if($__dbm['type'] != '')
 		{

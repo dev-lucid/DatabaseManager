@@ -12,7 +12,7 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 		# if the table name is passed, then use that. otherwise,
 		# derive it from the class name of the object.
 		if($table_name == '')
-			$this->__table = str_replace('dbm_model_','',get_class($this));
+			$this->__table = str_replace('dbm_model__','',get_class($this));
 		else
 			$this->__table = $table_name;
 		

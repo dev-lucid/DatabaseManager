@@ -18,7 +18,10 @@ class dbm_model_sql_builder extends dbm_collection
 		$max_page_sql .= ' from '.$this->__table;
 		
 		foreach($this->__sql_joins as $join)
-			$paged_sql.= $join->build_sql();
+		{
+			$paged_sql.= $join->build_join();
+			$max_page_sql .= $join->build_join();
+		}
 		
 		$filter_sql    = $this->__build_filters();
 		$paged_sql    .= $filter_sql;
@@ -84,10 +87,7 @@ class dbm_model_sql_builder extends dbm_collection
 		
 		foreach($this->__sql_joins as $join)
 		{
-			foreach($join->fields as $field)
-			{
-				$fields[] = $field;
-			}
+			$fields = array_merge($fields, $join->build_fields());
 		}
 		return implode(',',$fields);
 	}

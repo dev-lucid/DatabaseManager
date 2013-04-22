@@ -43,9 +43,52 @@ class dbm_model_sql_clauses extends dbm_model_sql_builder
 		return $this;
 	}
 	
-	public function join($table,$fields,$conditions,$type='inner')
-	{
-		$this->__joins[] = new dbm_model_sql_join($table,$conditions,$fields,$type);
+	public function join($table,$type='inner',$conditions=null,$field=null)
+	{		
+		# if a table model was passed, use that. If not, load the model
+		if(is_string($table))
+			$table = dbm::model($table);
+				
+		# if join conditions are not passed, try to find matching fields
+		if(is_null($conditions))
+		{
+			
+			
+			# look for a perfect match
+			$found = false;
+			foreach($this->__field_index as $name=>$idx)
+			{
+				if(array_key_exists($name,$table->__field_index))
+				{
+					$conditions = '('.$this->__table.'.'.$name.'='.$table->__table.'.'.$name.')';
+					$found = true;
+					break;
+				}
+			}
+			
+			if(!$found)
+			{
+				foreach($this->__field_index as $name1=>$idx2)
+				{
+					foreach($table->__field_index as $name2=>$idx2)
+					{
+						if(strpos($name1,$name2) !== false || strpos($name2,$name1) !== false)
+						{
+							$conditions = '('.$this->__table.'.'.$name1.'='.$table->__table.'.'.$name2.')';
+							$found = true;
+							break;
+						}
+					}
+				}
+			}
+		}
+		
+		if(!$found)
+		{
+			throw new Exception('DBM: could not find fields to join tables on: '.$this->__table.' / '.$table->__table);
+		}
+		
+		$this->__sql_joins[] = new dbm_model_sql_join($table,$type,$conditions,$fields);
 		return $this;
 	}
 	
