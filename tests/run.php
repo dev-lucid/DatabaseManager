@@ -5,7 +5,7 @@
 
 include_once(__DIR__.'/../lib/php/dbm.php');
 
-global $output_path;
+global $output_path,$nl,$__dbm;
 $output_path = '';
 $nl = (isset($_SERVER['HTTP_HOST']))?'<br />':"\n";
 $output  = __DIR__.'/generated/';
@@ -19,6 +19,13 @@ foreach($files as $file)
 	if(is_file($file))
 		unlink($file); 
 }
+
+function mylogger($string)
+{
+	global $nl;
+	echo($string.$nl);
+}
+#$__dbm['hooks']['log'] = 'mylogger';
 
 
 $fail_count = 0;

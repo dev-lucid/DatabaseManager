@@ -12,7 +12,7 @@ class dbm_model_sql_clauses extends dbm_model_sql_builder
 			$value = $operator;
 			$operator = '=';
 		}
-		$this->__sql_filters[] = new dbm_model_sql_filter($field,$operator,$value);
+		$this->__sql_filters[] = new dbm_filter($field,$operator,$value);
 		return $this;
 	}
 	
@@ -43,7 +43,7 @@ class dbm_model_sql_clauses extends dbm_model_sql_builder
 		return $this;
 	}
 	
-	public function join($table,$conditions,$fields,$type='inner')
+	public function join($table,$fields,$conditions,$type='inner')
 	{
 		$this->__joins[] = new dbm_model_sql_join($table,$conditions,$fields,$type);
 		return $this;

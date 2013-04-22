@@ -60,6 +60,7 @@ class dbm
 		include(__DIR__.'/dbm_field.php');
 		include(__DIR__.'/dbm_model.php');
 		include(__DIR__.'/dbm_adaptor.php');
+		include(__DIR__.'/dbm_filter.php');
 		
 		if($__dbm['type'] != '')
 		{

@@ -56,7 +56,8 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 	public function new_query()
 	{
 		$this->__reset();
-		$this->__index = 0;
+		$this->__index = -1;
+		$this->__records = null;
 		$this->__sql_sorts   = array();
 		$this->__sql_groups  = array();
 		$this->__sql_limit   = null;
@@ -73,14 +74,16 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 		return $this;
 	}
 	
-	public function import($data,$is_original=false)
+	public function __import($data,$is_original=false)
 	{
+		
 		foreach($data as $field=>$value)
 		{
 			if($is_original)
 				$this->__original_data[$field] = $value;
 			$this->__data[$field] = $value;
 		}
+		$this->__data['__max_page'] = $this->__sql_max_page;
 	}
 	
 	public function offsetExists ($offset )
@@ -90,6 +93,9 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 	
 	public function offsetGet ( $offset )
 	{
+		if(is_null($this->__records))
+			$this->__load();
+			
 		if(isset($this->__field_index[$offset]))
 			return $this->__fields[$this->__field_index[$offset]]->get_value();
 		return $this->__data[$offset];
@@ -97,6 +103,8 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 	
 	public function offsetSet ( $offset , $value )
 	{
+		if(is_null($this->__records))
+			$this->__load();
 		$this->__data[$offset] = $value;
 	}
 	
@@ -107,6 +115,8 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 	
 	public function get_field($field_name)
 	{
+		if(is_null($this->__records))
+			$this->__load();
 		return $this->__fields[$this->__field_index[$field_name]]->get_value();
 	}
 	
@@ -116,32 +126,72 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 		return $this;
 	}
 	
-	public function dump()
+	public function dump($html = true)
 	{
-		$first = true;
-		echo('<table>');
-		foreach($this as $row)
+		if(!$html)
 		{
-			if($first == true)
+			$out = '';
+			if($this->__index == -1)
 			{
-				echo('<tr>');
-				foreach($row->__data as $label=>$value)
+				foreach($this as $row)
 				{
-					echo('<th>'.$label.'</th>');
+					$out .= print_r($row->__data,true)."\n";
 				}
-				echo('</tr>');
-				$first = false;
 			}
-			echo('<tr>');
-			foreach($row->__data as $label=>$value)
+			else
 			{
-				echo('<td>'.$value.'</td>');
+				$out .= print_r($this->__data,true)."\n";
 			}
-			echo('</tr>');
+			return $out;
 		}
 		
-		echo('</table>');
-		return $this;
+		$out = '';
+		$out .= ('<table>');
+		
+		# if we're dumping the whole recordset,
+		if($this->__index == -1)
+		{
+			#echo('dumping entire table');
+			$first = true;
+			foreach($this as $row)
+			{
+				if($first == true)
+				{
+					$out .= ('<tr>');
+					foreach($row->__data as $label=>$value)
+					{
+						$out .= ('<th>'.$label.'</th>');
+					}
+					$out .= ('</tr>');
+					$first = false;
+				}
+				$out .= ('<tr>');
+				foreach($row->__data as $label=>$value)
+				{
+					$out .= ('<td>'.$value.'</td>');
+				}
+				$out .= ('</tr>');
+			}	
+		}
+		else
+		{
+			#echo('dumping single row');
+			$out .= ('<tr>');
+			foreach($this->__data as $label=>$value)
+			{
+				$out .= ('<th>'.$label.'</th>');
+			}
+			$out .= ('</tr>');
+			$out .= ('<tr>');
+			foreach($this->__data as $label=>$value)
+			{
+				$out .= ('<td>'.$value.'</td>');
+			}
+			$out .= ('</tr>');
+		}
+		
+		$out .= ('</table>');
+		return $out;
 	}
 }
 

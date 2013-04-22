@@ -27,6 +27,7 @@ class dbm_model_sql_builder extends dbm_collection
 		$paged_sql    .= $this->__build_sorts();
 		$paged_sql    .= $this->__build_paging();
 		
+		dbm::log('sql built: '.$paged_sql);
 		return array($paged_sql,$max_page_sql);
 	}
 	
@@ -135,6 +136,45 @@ class dbm_model_sql_builder extends dbm_collection
 		}
 		return array($fields,$vals);
 	}
+	
+	/*
+	
+	public function limit($new_limit)
+	{
+		$this->__sql_limit = $new_limit;
+		return $this;
+	}
+	
+	public function page($new_page,$limit=null)
+	{
+		if(!is_null($limit))
+		{
+			$this->__sql_limit = $limit;
+		}
+		$this->__sql_offset = $this->__sql_limit * $new_page;
+		return $this;
+	}
+	
+	public function sort($field,$dir = 'asc')
+	{
+		$field .= ($dir == 'asc')?'':' desc';
+		$this->__sql_sorts[] = $field;
+		return $this;
+	}
+	
+	public function filter($field,$operator,$value=_DBM_SQL_FAKENULL_)
+	{
+		if($value === _DBM_SQL_FAKENULL_)
+		{
+			$value = $operator;
+			$operator = '=';
+			if(is_array($value))
+				$operator = 'in';
+		}
+		$this->__sql_filters[] = new dbm_filter($field,$operator,$value);
+		return $this;
+	}
+	*/
 }
 
 ?>

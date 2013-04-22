@@ -8,4 +8,6 @@ dbm::init(array(
 	'host'=>'localhost',
 ));
 
+
+file_put_contents($output_path,'success');
 ?>

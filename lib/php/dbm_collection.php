@@ -17,9 +17,15 @@ class dbm_collection implements Iterator
 		$this->__index++;
 		$this->__reset();
 		
+		# if the records haven't been queried for, 
+		# do so now
+		if(is_null($this->__records))
+		{
+			$this->__load();
+		}
 		
 		if($this->valid())
-			$this->import($this->__records->fetch_assoc(),true);
+			$this->__import($this->__records->fetch_assoc(),true);
 	}
 	
 	public function rewind ( )
@@ -30,9 +36,7 @@ class dbm_collection implements Iterator
 		# do so now
 		if(is_null($this->__records))
 		{
-			$queries = $this->__build_select_query();
-			print_r($queries);
-			$this->__records = dbm::query($queries[0]);
+			$this->__load();
 		}
 
 		#$this->__records->data_seek(0);
@@ -42,6 +46,20 @@ class dbm_collection implements Iterator
 	public function valid ( )
 	{
 		return ($this->__index  < $this->__records->num_rows);
+	}
+	
+	private function __load()
+	{
+		$queries = $this->__build_select_query();
+		$this->__records = dbm::query($queries[0]);
+		
+		
+		if(!is_null($this->__sql_limit) && !is_null($this->__sql_offset))
+		{
+			$max_page = dbm::query($queries[1]);
+			$result = $max_page->fetch_assoc();
+			$this['__max_page'] = ceil($result['max_page'] / $this->__sql_limit);			
+		}
 	}
 }
 
