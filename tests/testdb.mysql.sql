@@ -20,10 +20,11 @@ insert into table1 (table1_vc1,table1_vc2,table1_i1) values ('j','J',2);
 insert into table1 (table1_vc1,table1_vc2,table1_i1) values ('k','K',1);
 
 drop table if exists table2;
+
 create table table2(
 	table2_id int8 primary key auto_increment,
 	table1_i1 int8,
-	table2_vc1 varchar(10),
+	table2_vc1 varchar(10)
 );
 insert into table2 (table1_i1,table2_vc1) values (1,'state:1');
 insert into table2 (table1_i1,table2_vc1) values (2,'state:2');

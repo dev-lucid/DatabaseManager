@@ -10,6 +10,8 @@ $__dbm = array(
 	'username'=>'',
 	'password'=>'',
 	'port'=>'',
+	'model_path'=>'',
+	'base_subdir'=>'base/',
 	'connection'=>null,
 	'hooks'=>array(),
 );
@@ -93,13 +95,34 @@ class dbm
 	public static function query($sql)
 	{
 		global $__dbm;
+		dbm::log($sql);
 		return $__dbm['connection']->query($sql);
 	}
 	
 	public static function model($name)
 	{
-		$return = new dbm_model($name);
-		return $return;
+		global $__dbm;
+		
+		dbm::log('loading new model: '.$name);
+		
+		$base_class = 'dbm_model__base__'.$name;
+		$main_class = 'dbm_model__'.$name;
+		
+		if(!class_exists($base_class) && file_exists($__dbm['model_path'].$__dbm['base_subdir'].$name.'.php'))
+			include($__dbm['model_path'].$__dbm['base_subdir'].$name.'.php');
+		
+		if(!class_exists($main_class) && file_exists($__dbm['model_path'].$name.'.php'))
+			include($__dbm['model_path'].$name.'.php');
+			
+		if(class_exists($main_class))
+			$model = new $main_class($name);
+		else
+		{
+			dbm::log('Could not find model lib, creating generic model for: '.$name);
+			$model = new dbm_model($name);
+		}
+		
+		return $model;
 	}
 }
 
