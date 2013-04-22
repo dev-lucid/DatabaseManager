@@ -5,12 +5,21 @@
 
 include_once(__DIR__.'/../lib/php/dbm.php');
 
-global $output_path,$nl,$__dbm;
+global $output_path,$nl,$__dbm,$config;
 $output_path = '';
 $nl = (isset($_SERVER['HTTP_HOST']))?'<br />':"\n";
 $output  = __DIR__.'/generated/';
 $compare = __DIR__.'/expected/';
 $tests  = __DIR__.'/tests/';
+
+$config = array(
+	'type'=>'mysql',
+	'username'=>'dbm_testuser',
+	'password'=>'dbm_testuser',
+	'database'=>'dbm_testdb',
+	'host'=>'localhost',
+	'model_path'=>__DIR__.'/generated/models/',
+);
 
 
 $files = glob($output.'*');
@@ -30,11 +39,27 @@ function mylogger($string)
 
 $fail_count = 0;
 echo('rebuilding database'.$nl);
-echo('mysql --user=dbm_testuser --password=dbm_testuser dbm_testdb < '.__DIR__.'/testdb.mysql.sql;'.$nl);
-shell_exec('mysql --user=dbm_testuser --password=dbm_testuser dbm_testdb < '.__DIR__.'/testdb.mysql.sql;');
+echo('mysql --user='.$config['username'].' --password='.$config['password'].' '.$config['database'].' < '.__DIR__.'/testdb.mysql.sql;'.$nl);
+shell_exec('mysql --user='.$config['username'].' --password='.$config['password'].' '.$config['database'].' < '.__DIR__.'/testdb.mysql.sql;');
 
+echo('removing all existing models'.$nl);
+$files = glob($config['model_path'].'/*'); // get all file names
+foreach($files as $file)
+{
+	if(is_file($file))
+		unlink($file);
+}
+
+$files = glob($config['model_path'].$config['base_subdir'].'/*'); // get all file names
+foreach($files as $file)
+{ 
+	if(is_file($file))
+		unlink($file); 
+}
 
 echo('Beginning test run'.$nl.' '.$nl);
+
+
 
 $files = glob($tests.'*');
 foreach($files as $file)

@@ -1,12 +1,7 @@
 <?php
 
-dbm::init(array(
-	'type'=>'mysql',
-	'username'=>'dbm_testuser',
-	'password'=>'dbm_testuser',
-	'database'=>'dbm_testdb',
-	'host'=>'localhost',
-));
+global $config;
+dbm::init($config);
 
 
 file_put_contents($output_path,'success');

@@ -21,8 +21,8 @@ while($table = $tables->fetch_assoc())
 	$base_out = '';
 	$main_out = '';
 	
-	$base_file = __DIR__.'/'.$__dbm['model_path'].$__dbm['base_subdir'].$table['name'].'.php';
-	$main_file = __DIR__.'/'.$__dbm['model_path'].$table['name'].'.php';
+	$base_file = $__dbm['model_path'].$__dbm['base_subdir'].$table['name'].'.php';
+	$main_file = $__dbm['model_path'].$table['name'].'.php';
 	echo("\tbuilding base model for ".$table['name']."\n");
 	
 	
