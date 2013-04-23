@@ -22,7 +22,8 @@ class dbm_adaptor_mysql extends dbm_adaptor
 	
 	function handle_error()
 	{
-		throw new Exception('DBM: mysql error '.$mysqli->errno . ': ' . $mysqli->error);
+		global $__dbm;
+		throw new Exception('DBM: mysql error '.$__dbm['connection']->errno . ': ' . $__dbm['connection']->error);
 	}
 	
 	function handle_format($input)
