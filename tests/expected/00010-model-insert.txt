@@ -1,3 +1,4 @@
+new id: 13
 Array
 (
     [table1_id] => 13

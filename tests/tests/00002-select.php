@@ -1,7 +1,7 @@
 <?php
 
 $result = dbm::query('select * from table1;');
-print_r($result);
+
 $out = '';
 while($row = $result->fetch_assoc())
 {

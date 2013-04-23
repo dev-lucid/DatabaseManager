@@ -43,7 +43,7 @@ class dbm_model_sql_clauses extends dbm_model_sql_builder
 		return $this;
 	}
 	
-	public function join($table,$type='inner',$conditions=null,$field=null)
+	public function join($table,$type='inner',$conditions=null,$fields=null)
 	{		
 		# if a table model was passed, use that. If not, load the model
 		if(is_string($table))
@@ -121,14 +121,30 @@ class dbm_model_sql_clauses extends dbm_model_sql_builder
 			&&
 			!is_null($this->__data[$this->__fields[0]->name])
 		)
-			$sql = $this->__build_update_query();
-		else
-			$sql = $this->__build_insert_query();
-			
-		if($sql !== false)
 		{
-			dbm::query($sql);
+			$sql = $this->__build_update_query();
+			if($sql !== false)
+			{
+				dbm::query($sql);
+			}
 		}
+		else
+		{
+			$sql = $this->__build_insert_query();
+			if($sql !== false)
+			{
+				$results = dbm::multi_query($sql);
+				
+				# the insert query actually contains 2 queries: a select  and an insert.
+				# the first query will not have an actual result set, 
+				# so we only need to look for the 2nd one, fetch it, and 
+				# store the new id into the object.
+				$result = $results[1]->fetch_assoc();
+				$this->__data[$this->__fields[0]->name] = $result['new_id'];
+			}
+		}
+			
+		
 					
 		return $this;
 	}

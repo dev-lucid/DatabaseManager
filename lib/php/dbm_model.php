@@ -96,8 +96,9 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 		if(is_null($this->__records))
 			$this->__load();
 			
-		if(isset($this->__field_index[$offset]))
-			return $this->__fields[$this->__field_index[$offset]]->get_value();
+		if(!array_key_exists($offset,$this->__data))
+			return null;
+			
 		return $this->__data[$offset];
 	}
 	
