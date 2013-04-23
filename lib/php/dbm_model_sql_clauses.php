@@ -126,7 +126,9 @@ class dbm_model_sql_clauses extends dbm_model_sql_builder
 			$sql = $this->__build_insert_query();
 			
 		if($sql !== false)
+		{
 			dbm::query($sql);
+		}
 					
 		return $this;
 	}

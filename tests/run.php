@@ -112,6 +112,4 @@ else
 	echo($fail_count. ' TEST(S) FAILED'.$nl);
 }
 
-
-
 ?>

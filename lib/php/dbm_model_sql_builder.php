@@ -71,6 +71,8 @@ class dbm_model_sql_builder extends dbm_collection
 		$sql .= '('.implode(',',$fields).')'."\n";
 		$sql .= ' values '."\n";
 		$sql .= '('.implode(',',$final).');';
+		
+		#$sql .= "\nselect max(".$this->__fields[0]->name.") as new_id from ".$this->__table."; ";
 		return $sql;
 	}
 	
