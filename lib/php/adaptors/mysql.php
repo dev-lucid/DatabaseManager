@@ -8,16 +8,21 @@ class dbm_adaptor_mysql extends dbm_adaptor
 		
 		$__dbm['adaptor'] = __CLASS__;
 		$__dbm['connection'] = mysqli_connect(
-			$__dbm['hostname'],
+			$__dbm['host'],
 			$__dbm['username'],
 			$__dbm['password'],
 			$__dbm['database']
 		);
 		
-		if (mysqli_connect_errno($con))
+		if (mysqli_connect_errno($__dbm['connection']))
 		{
 			throw new Exception('DBM: Could not connect to database: '.mysqli_connect_error());
 		}
+	}
+	
+	function handle_error()
+	{
+		throw new Exception('DBM: mysql error '.$mysqli->errno . ': ' . $mysqli->error);
 	}
 	
 	function handle_format($input)

@@ -97,7 +97,12 @@ class dbm
 	{
 		global $__dbm;
 		dbm::log($sql);
-		return $__dbm['connection']->query($sql);
+		$result = $__dbm['connection']->query($sql);
+		if(!$result)
+		{
+			$__dbm['adaptor']::handle_error();
+		}
+		return $result;
 	}
 	
 	public static function model($name)

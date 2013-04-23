@@ -38,6 +38,7 @@ function mylogger($string)
 if(in_array('echolog',$argv))
 	$__dbm['hooks']['log'] = 'mylogger';
 
+$exit_on_error = (in_array('exitonerror',$argv));
 
 $fail_count = 0;
 echo('rebuilding database'.$nl);
@@ -52,7 +53,7 @@ foreach($files as $file)
 		unlink($file);
 }
 
-$files = glob($config['model_path'].$config['base_subdir'].'/*'); // get all file names
+$files = glob($config['model_path'].$__dbm['base_subdir'].'/*'); // get all file names
 foreach($files as $file)
 { 
 	if(is_file($file))
@@ -97,8 +98,12 @@ foreach($files as $file)
 			$fail_count++;
 			
 		$result = ($to_test == $good_val)?'SUCCESS':'FAIL';
+		
 		echo($result);
 		echo($nl);
+		
+		if($result == 'FAIL' && $exit_on_error)
+			exit("\n");
 	}
 }
 
