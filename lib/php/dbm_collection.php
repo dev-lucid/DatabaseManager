@@ -30,7 +30,9 @@ class dbm_collection implements Iterator
 		}
 		
 		if($this->valid())
-			$this->__import($this->__records->fetch_assoc(),true);
+		{
+			$this->__import($this->__records->fetch(PDO::FETCH_ASSOC),true);
+		}
 	}
 	
 	public function rewind ( )
@@ -50,7 +52,7 @@ class dbm_collection implements Iterator
 	
 	public function valid ( )
 	{
-		return ($this->__index  < $this->__records->num_rows);
+		return ($this->__index  < $this->__records->rowCount());
 	}
 	
 	protected function __load()
@@ -62,7 +64,7 @@ class dbm_collection implements Iterator
 		if(!is_null($this->__sql_limit) && !is_null($this->__sql_offset))
 		{
 			$max_page = dbm::query($queries[1]);
-			$result = $max_page->fetch_assoc();
+			$result = $max_page->fetch();
 			$this['__max_page'] = ceil($result['max_page'] / $this->__sql_limit);			
 		}
 	}

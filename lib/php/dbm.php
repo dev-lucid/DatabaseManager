@@ -104,21 +104,6 @@ class dbm
 		}
 		return $result;
 	}
-	
-	public static function multi_query($sql)
-	{
-		global $__dbm;
-		dbm::log($sql);
-		$__dbm['connection']->multi_query($sql);
-		$results = array();
-		
-		do {
-			$results[] = $__dbm['connection']->store_result();
-		}
-		while($__dbm['connection']->next_result());
-		
-		return $results;
-	}
 		
 	public static function model($name)
 	{

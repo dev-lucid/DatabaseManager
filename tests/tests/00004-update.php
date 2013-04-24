@@ -4,7 +4,7 @@ dbm::query('update table1 set table1_vc2=\'LL\' where table1_vc1=\'l\';');
 
 $result = dbm::query('select * from table1;');
 $out = '';
-while($row = $result->fetch_assoc())
+while($row = $result->fetch(PDO::FETCH_ASSOC))
 {
 	$out .= print_r($row,true)."\n";
 }

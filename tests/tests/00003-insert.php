@@ -4,7 +4,7 @@ dbm::query('insert into table1 (table1_vc1,table1_vc2,table1_i1) values (\'l\',\
 
 $result = dbm::query('select * from table1;');
 $out = '';
-while($row = $result->fetch_assoc())
+while($row = $result->fetch(PDO::FETCH_ASSOC))
 {
 	$out .= print_r($row,true)."\n";
 }

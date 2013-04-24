@@ -2,6 +2,18 @@
 
 abstract class dbm_adaptor 
 {
+	function init()
+	{
+		global $__dbm;
+
+		$__dbm['adaptor'] = 'dbm_adaptor_'.$__dbm['type'];
+		$__dbm['connection'] = new PDO(
+			$__dbm['type'].':host='.$__dbm['host'].';dbname='.$__dbm['database'], 
+			$__dbm['username'],
+			$__dbm['password']
+		);		
+	}
+	
 	public static function get_tables()
 	{
 		global $__dbm;

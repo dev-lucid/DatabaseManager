@@ -129,6 +129,7 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 	
 	public function dump($html = true)
 	{
+		
 		if(!$html)
 		{
 			$out = '';

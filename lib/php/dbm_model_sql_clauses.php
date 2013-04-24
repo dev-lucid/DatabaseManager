@@ -102,12 +102,12 @@ class dbm_model_sql_clauses extends dbm_model_sql_builder
 		if($this->__sql_determine_max_page === true)
 		{
 			$records = dbm_db::query($max_page_sql);
-			$record = $records->fetch_assoc();
+			$record = $records->fetch();
 			$this->__sql_max_page = ceil($record['max_page'] / $this->__sql_limit);
 		}
 		$this->__records = dbm::query($paged_sql);
 		
-		if ($this->__records->num_rows == 1)
+		if ($this->__records->rowCount() == 1)
 		{
 			$this->rewind();
 		}
@@ -116,12 +116,16 @@ class dbm_model_sql_clauses extends dbm_model_sql_builder
 	
 	public function save()
 	{
+		#echo('save being called: '.print_r($this->__data,true).'<br />');
+		#echo('condition1: isset '.isset($this->__data[$this->__fields[0]->name]).'<br />');
+		#echo('condition2: !isnull '.(!is_null($this->__data[$this->__fields[0]->name])).'<br/>');
 		if(
 			isset($this->__data[$this->__fields[0]->name])
 			&&
 			!is_null($this->__data[$this->__fields[0]->name])
 		)
 		{
+			#echo('building update<br />');
 			$sql = $this->__build_update_query();
 			if($sql !== false)
 			{
@@ -130,17 +134,14 @@ class dbm_model_sql_clauses extends dbm_model_sql_builder
 		}
 		else
 		{
+			#echo('building insert<br />');
 			$sql = $this->__build_insert_query();
 			if($sql !== false)
 			{
-				$results = dbm::multi_query($sql);
-				
-				# the insert query actually contains 2 queries: a select  and an insert.
-				# the first query will not have an actual result set, 
-				# so we only need to look for the 2nd one, fetch it, and 
-				# store the new id into the object.
-				$result = $results[1]->fetch_assoc();
-				$this->__data[$this->__fields[0]->name] = $result['new_id'];
+				$results = dbm::query($sql);
+				$results->nextRowset();
+				$results = $results->fetch();
+				$this->__data[$this->__fields[0]->name] = $results['new_id'];
 			}
 		}
 			
