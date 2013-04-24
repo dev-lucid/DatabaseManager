@@ -62,7 +62,9 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 		$this->__sql_groups  = array();
 		$this->__sql_limit   = null;
 		$this->__sql_offset  = null;
+		$this->__sql_row_count = null;
 		$this->__sql_filters = array();
+		$this->__sql_row_count = null;
 		$this->__sql_determine_max_page = false;
 		return $this;
 	}

@@ -52,13 +52,16 @@ class dbm_collection implements Iterator
 	
 	public function valid ( )
 	{
-		return ($this->__index  < $this->__records->rowCount());
+		#echo('rowCount: '.$this->__index.'/'.$this->__sql_row_count.'<br/>');
+		return ($this->__index  < $this->__sql_row_count);
 	}
 	
 	protected function __load()
 	{
 		$queries = $this->__build_select_query();
 		$this->__records = dbm::query($queries[0]);
+		$this->__sql_row_count = $this->__records->rowCount();
+		
 		
 		
 		if(!is_null($this->__sql_limit) && !is_null($this->__sql_offset))
@@ -67,6 +70,8 @@ class dbm_collection implements Iterator
 			$result = $max_page->fetch();
 			$this['__max_page'] = ceil($result['max_page'] / $this->__sql_limit);			
 		}
+		
+		
 	}
 }
 
