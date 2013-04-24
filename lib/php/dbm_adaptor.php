@@ -42,6 +42,23 @@ abstract class dbm_adaptor
 		#echo($sql);
 		return dbm::query($sql);
 	}
+	
+	function handle_format($input)
+	{
+		global $__dbm;
+		if(is_numeric($input))
+			return $input;
+		else if(is_null($input) || $input === _DBM_SQL_FAKENULL_)
+			return 'NULL';
+		else
+			return $__dbm['connection']->quote($input);
+	}
+	
+	function handle_error()
+	{
+		global $__dbm;
+		throw new Exception('DBM: error '.$__dbm['connection']->errorCode() . ': ' . $__dbm['connection']->errorInfo());
+	}
 }
 
 ?>

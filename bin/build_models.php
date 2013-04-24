@@ -16,7 +16,7 @@ dbm::init($config);
 
 echo("inited\n");
 $tables = $__dbm['adaptor']::get_tables();
-while($table = $tables->fetch_assoc())
+while($table = $tables->fetch(PDO::FETCH_ASSOC))
 {
 	$base_out = '';
 	$main_out = '';
@@ -31,7 +31,7 @@ while($table = $tables->fetch_assoc())
 	
 	$base_out .= "\tpublic function __init_fields()\n\t{\n";
 	$cols = $__dbm['adaptor']::get_columns($table['name']);
-	while($col = $cols->fetch_assoc())
+	while($col = $cols->fetch(PDO::FETCH_ASSOC))
 	{
 		echo("\t\t".$col['name']."\n");
 		
