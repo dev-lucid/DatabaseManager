@@ -35,11 +35,12 @@ class dbm_model_sql_clauses extends dbm_model_sql_builder
 		return $this;
 	}
 	
-	public function page($start_page,$page_size)
+	public function page($start_page,$page_size=null)
 	{
 		$this->__sql_determine_max_page = true;
-		$this->__sql_limit  = $page_size;
-		$this->__sql_offset = $start_page * $page_size;
+		if(!is_null($page_size))
+			$this->__sql_limit  = $page_size;
+		$this->__sql_offset = $start_page * $this->__sql_limit;
 		return $this;
 	}
 	
@@ -81,13 +82,12 @@ class dbm_model_sql_clauses extends dbm_model_sql_builder
 					}
 				}
 			}
+			if(!$found)
+			{
+				throw new Exception('DBM: could not find fields to join tables on: '.$this->__table.' / '.$table->__table);
+			}
 		}
-		
-		if(!$found)
-		{
-			throw new Exception('DBM: could not find fields to join tables on: '.$this->__table.' / '.$table->__table);
-		}
-		
+				
 		$this->__sql_joins[] = new dbm_model_sql_join($table,$type,$conditions,$fields);
 		return $this;
 	}

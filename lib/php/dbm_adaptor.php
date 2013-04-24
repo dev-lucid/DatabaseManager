@@ -7,11 +7,24 @@ abstract class dbm_adaptor
 		global $__dbm;
 
 		$__dbm['adaptor'] = 'dbm_adaptor_'.$__dbm['type'];
+		
+		$__dbm['adaptor']::before_connect();
 		$__dbm['connection'] = new PDO(
 			$__dbm['type'].':host='.$__dbm['host'].';dbname='.$__dbm['database'], 
 			$__dbm['username'],
-			$__dbm['password']
-		);		
+			$__dbm['password'],
+			$__dbm['adaptor_options']
+		);
+		$__dbm['adaptor']::after_connect();
+		
+	}
+	
+	public static function before_connect()
+	{
+	}
+	
+	public static function after_connect()
+	{
 	}
 	
 	public static function get_tables()

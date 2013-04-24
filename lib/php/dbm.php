@@ -13,6 +13,7 @@ $__dbm = array(
 	'model_path'=>'',
 	'base_subdir'=>'base/',
 	'connection'=>null,
+	'adaptor_options'=>array(),
 	'hooks'=>array(),
 );
 
