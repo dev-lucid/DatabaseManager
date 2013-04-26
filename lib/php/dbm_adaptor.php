@@ -70,7 +70,8 @@ abstract class dbm_adaptor
 	function handle_error()
 	{
 		global $__dbm;
-		throw new Exception('DBM: error '.$__dbm['connection']->errorCode() . ': ' . $__dbm['connection']->errorInfo());
+		$info = $__dbm['connection']->errorInfo();
+		throw new Exception('DBM: error '.$__dbm['connection']->errorCode() . ': state '.$info[1].' / '.$info[2]);
 	}
 }
 
