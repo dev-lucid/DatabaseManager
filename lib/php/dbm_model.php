@@ -129,6 +129,11 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 		return $this;
 	}
 	
+	public function row_array()
+	{
+		return $this->__data;
+	}
+	
 	public function dump($html = true)
 	{
 		
