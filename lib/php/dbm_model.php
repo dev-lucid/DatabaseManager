@@ -107,7 +107,7 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 	public function offsetSet ( $offset , $value )
 	{
 		if(is_null($this->__records))
-			$this->__load();
+			$this->load();
 		$this->__data[$offset] = $value;
 	}
 	

@@ -98,17 +98,28 @@ class dbm_model_sql_clauses extends dbm_model_sql_builder
 			$this->filter($this->__fields[0]->name,'=',$id);
 		list($paged_sql,$max_page_sql) = $this->__build_select_query();
 		
-		# if we need to determine the max page, then do so
+		# if we need to determine the max page, then do so	
+		dbm::log('determining max page');
 		if(!is_null($this->__sql_limit) && !is_null($this->__sql_offset))
 		{
-			$records = dbm_db::query($max_page_sql);
+			$records = dbm::query($max_page_sql);
 			$record = $records->fetch();
+			
 			$this->__sql_max_page = ceil($record['max_page'] / $this->__sql_limit);
 		}
 		$this->__records = dbm::query($paged_sql);
 		$this->__sql_row_count = $this->__records->rowCount();
-		$this->rewind();
+		$this->__index = -1;
+		#$this->rewind();
 		
+		return $this;
+	}
+	
+	function select($query)
+	{
+		$this->__records = dbm::query('select '.$query);
+		$this->__sql_row_count = $this->__records->rowCount();
+		$this->__index = -1;
 		return $this;
 	}
 	

@@ -50,6 +50,19 @@ class dbm_filter
 				$out .= $__dbm['adaptor']::handle_format($this->value);
 				
 				break;
+			case '%':
+			case '%=':
+			case '=%':
+				if(is_null($this->value))
+				{
+					throw new Exception('DBM: filter cannot compare to null: '.$this->field);
+				}
+				
+				$out .= $this->field .' like \''.(($this->operator == '%' || $this->operator == '%=')?'%':'');
+				$out .= $this->value;
+				$out .= (($this->operator == '%' || $this->operator == '=%')?'%':'').'\'';
+				
+				break;
 			case 'in':
 				if(is_string($this->value))
 				{
