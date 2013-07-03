@@ -76,6 +76,20 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 		return $this;
 	}
 	
+	public function import($source = false)
+	{
+		if($source === false)
+			$source = $_REQUEST;
+		foreach($this->__fields as $field)
+		{
+			if(isset($source[$field->name]))
+			{
+				$this->__data[$field->name] = $source[$field->name];
+			}
+		}
+		return $this;
+	}
+	
 	public function __import($data,$is_original=false)
 	{
 		
