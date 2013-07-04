@@ -53,6 +53,11 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 		}
 	}
 	
+	public function to_array()
+	{
+		return $this->__data;
+	}
+	
 	public function new_query()
 	{
 		$this->__reset();
