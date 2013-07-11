@@ -26,7 +26,7 @@ class dbm_collection implements Iterator
 		
 		if($this->valid())
 		{
-			$this->__import($this->__records->fetch(PDO::FETCH_ASSOC),true);
+			$this->__import($this->__records[$this->__index],true);
 		}
 	}
 	
@@ -40,14 +40,12 @@ class dbm_collection implements Iterator
 		{
 			$this->load();
 		}
-
-		#$this->__records->data_seek(0);
+		
 		$this->next();
 	}
 	
 	public function valid ( )
 	{
-		#echo('rowCount: '.$this->__index.'/'.$this->__sql_row_count.'<br/>');
 		return ($this->__index  < $this->__sql_row_count);
 	}
 }

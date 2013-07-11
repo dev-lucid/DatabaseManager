@@ -108,7 +108,8 @@ class dbm_model_sql_clauses extends dbm_model_sql_builder
 			$this->__sql_max_page = ceil($record['max_page'] / $this->__sql_limit);
 		}
 		$this->__records = dbm::query($paged_sql);
-		$this->__sql_row_count = $this->__records->rowCount();
+		$this->__records = $this->__records->fetchAll(PDO::FETCH_ASSOC);
+		$this->__sql_row_count =count($this->__records);
 		$this->__index = -1;
 		#$this->rewind();
 		

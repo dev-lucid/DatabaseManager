@@ -98,7 +98,8 @@ class dbm_model_sql_builder extends dbm_collection
 		
 		foreach($this->__sql_joins as $join)
 		{
-			$fields = array_merge($fields, $join->build_fields());
+			$join_fields = $join->build_fields();
+			$fields = array_merge($fields, $join_fields);
 		}
 		return implode(',',$fields);
 	}
