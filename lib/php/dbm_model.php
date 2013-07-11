@@ -31,6 +31,8 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 		$this->__sql_groups  = array();
 		$this->__sql_limit   = null;
 		$this->__sql_offset  = null;
+		
+		$this->__autoformat = array();
 
 		#
 		$this->__sql_max_page = 0;
@@ -83,13 +85,16 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 	
 	public function import($source = false)
 	{
+		global $__dbm;
 		if($source === false)
 			$source = $_REQUEST;
 		foreach($this->__fields as $field)
 		{
 			if(isset($source[$field->name]))
 			{
-				$this->__data[$field->name] = $source[$field->name];
+				$val = $source[$field->name];
+				
+				$this->__data[$field->name] = $val;
 			}
 		}
 		return $this;
@@ -97,9 +102,31 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 	
 	public function __import($data,$is_original=false)
 	{
-		
+		global $__dbm;
 		foreach($data as $field=>$value)
 		{
+
+			if(isset($this->__autoformat[$field]))
+			{
+				if(is_callable($this->__autoformat[$field]))
+				{
+					$value = $this->__autoformat[$field]($field,$value);
+				}
+				else
+				{
+					switch($this->__autoformat[$field])
+					{
+						case 'date-short':
+							$value = date($__dbm['formats']['date-short'],$value);
+							break;
+						case 'date-long':
+							$value = date($__dbm['formats']['date-long'],$value);
+							break;
+					}
+				}
+			}
+		
+			
 			if($is_original)
 				$this->__original_data[$field] = $value;
 			$this->__data[$field] = $value;
@@ -220,6 +247,12 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 		
 		$out .= ('</table>');
 		return $out;
+	}
+	
+	function format($field,$format)
+	{
+		$this->__autoformat[$field] = $format;
+		return $this;
 	}
 }
 

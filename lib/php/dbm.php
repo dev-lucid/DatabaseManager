@@ -15,6 +15,10 @@ $__dbm = array(
 	'connection'=>null,
 	'adaptor_options'=>array(),
 	'hooks'=>array(),
+	'formats'=>array(
+		'date-short'=>'M j, Y',
+		'date-long'=>'F j, Y H:i',
+	),
 );
 
 include(__DIR__.'/dbm_collection.php');
