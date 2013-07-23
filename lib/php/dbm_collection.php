@@ -27,7 +27,9 @@ class dbm_collection implements Iterator
 		if($this->valid())
 		{
 			$this->__import($this->__records[$this->__index],true);
+			return true;
 		}
+		return false;
 	}
 	
 	public function rewind ( )

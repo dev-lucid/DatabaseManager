@@ -103,34 +103,36 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 	public function __import($data,$is_original=false)
 	{
 		global $__dbm;
-		foreach($data as $field=>$value)
+		
+		foreach($this->__autoformat as $field=>$format)
 		{
-
-			if(isset($this->__autoformat[$field]))
+			if(is_callable($format))
 			{
-				if(is_callable($this->__autoformat[$field]))
+				$data = $format($data);
+			}
+			else
+			{
+				switch($format)
 				{
-					$value = $this->__autoformat[$field]($field,$value);
-				}
-				else
-				{
-					switch($this->__autoformat[$field])
-					{
-						case 'date-short':
-							$value = date($__dbm['formats']['date-short'],$value);
-							break;
-						case 'date-long':
-							$value = date($__dbm['formats']['date-long'],$value);
-							break;
-					}
+					case 'date-short':
+						$data[$field] = date($__dbm['formats']['date-short'],$data[$field]);
+						break;
+					case 'date-long':
+						$data[$field] = date($__dbm['formats']['date-long'],$data[$field]);
+						break;
 				}
 			}
+		}
 		
-			
+		
+		foreach($data as $field=>$value)
+		{			
 			if($is_original)
 				$this->__original_data[$field] = $value;
 			$this->__data[$field] = $value;
 		}
+
+		
 		$this->__data['__max_page'] = $this->__sql_max_page;
 	}
 	
@@ -249,9 +251,13 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 		return $out;
 	}
 	
-	function format($field,$format)
+	function format($field,$format=null)
 	{
-		$this->__autoformat[$field] = $format;
+		if(is_null($format))
+			$this->__autoformat[] = $field;
+		else
+			$this->__autoformat[$field] = $format;
+			
 		return $this;
 	}
 }
