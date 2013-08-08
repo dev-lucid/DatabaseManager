@@ -128,21 +128,21 @@ class dbm_model_sql_builder extends dbm_collection
 	{
 		$fields = array();
 		$vals   = array();
-		foreach($this->__fields as $field)
+		for($i=1;$i<count($this->__fields);$i++)
 		{
-			if(!isset($this->__data[$field->name]))
+			if(!isset($this->__data[$this->__fields[$i]->name]))
 			{
-				$this->__data[$field->name] = null;
+				$this->__data[$this->__fields[$i]->name] = null;
 			}
-			if(!isset($this->__original_data[$field->name]))
+			if(!isset($this->__original_data[$this->__fields[$i]->name]))
 			{
-				$this->__original_data[$field->name] = null;
+				$this->__original_data[$this->__fields[$i]->name] = null;
 			}
 			
-			if($this->__original_data[$field->name] !== $this->__data[$field->name])
+			if($this->__original_data[$this->__fields[$i]->name] !== $this->__data[$this->__fields[$i]->name])
 			{
-				$fields[] = $field->name;
-				$vals[]   = $this->__data[$field->name];
+				$fields[] = $this->__fields[$i]->name;
+				$vals[]   = $this->__data[$this->__fields[$i]->name];
 			}
 			
 		}
@@ -188,5 +188,6 @@ class dbm_model_sql_builder extends dbm_collection
 	}
 	*/
 }
+
 
 ?>

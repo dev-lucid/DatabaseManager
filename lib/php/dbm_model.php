@@ -55,9 +55,30 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 		}
 	}
 	
-	public function to_array()
+	public function to_array($idx=null,$value=null)
 	{
-		return $this->__data;
+		$this->load();
+		if(!is_null($idx))
+		{
+			$to_return = array();
+			if(is_null($value))
+			{
+				
+				foreach($this->__records as $record)
+				{
+					$to_return[$record[$idx]] = $record;
+				}
+			}
+			else
+			{
+				foreach($this->__records as $record)
+				{
+					$to_return[$record[$idx]] = $record[$value];
+				}
+			}
+			return $to_return;
+		}
+		return $this->__records;
 	}
 	
 	public function new_query()
@@ -259,6 +280,11 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 			$this->__autoformat[$field] = $format;
 			
 		return $this;
+	}
+	
+	function is_changed($field)
+	{
+		return ($this->__data[$field] != $this->__original_data[$field]);
 	}
 }
 
