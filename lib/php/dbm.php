@@ -109,6 +109,13 @@ class dbm
 		}
 		return $result;
 	}
+	
+	public static function get_column($sql,$column)
+	{
+		$records = dbm::query($sql);
+		$record = $records->fetch();
+		return $record[$column];
+	}
 		
 	public static function model($name)
 	{

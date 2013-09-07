@@ -113,6 +113,8 @@ class dbm_model_sql_clauses extends dbm_model_sql_builder
 		$this->__index = -1;
 		#$this->rewind();
 		
+		$this->__sql_filters = array();
+		
 		if(is_numeric($id))
 			$this->next();
 			

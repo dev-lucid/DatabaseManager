@@ -50,6 +50,16 @@ class dbm_collection implements Iterator
 	{
 		return ($this->__index  < $this->__sql_row_count);
 	}
+	
+	public function at_start()
+	{
+		return ($this->__index == 0);
+	}
+	
+	public function at_end()
+	{
+		return (($this->__index + 1)  == $this->__sql_row_count);
+	}
 }
 
 ?>
