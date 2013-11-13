@@ -141,7 +141,6 @@ class dbm_model_sql_clauses extends dbm_model_sql_builder
 		)
 		{
 			#echo('building update<br />');
-			$this->filter($this->__fields[0]->name,$this->__data[$this->__fields[0]->name]);
 			$sql = $this->__build_update_query();
 			if($sql !== false)
 			{

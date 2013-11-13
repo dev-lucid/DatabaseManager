@@ -109,6 +109,8 @@ class dbm_model extends dbm_model_sql_clauses implements ArrayAccess
 		global $__dbm;
 		if($source === false)
 			$source = $_REQUEST;
+		if(is_null($this->__records))
+			$this->__records = array();
 		foreach($this->__fields as $field)
 		{
 			if(isset($source[$field->name]))

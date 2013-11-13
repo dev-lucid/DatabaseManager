@@ -52,7 +52,7 @@ class dbm_model_sql_builder extends dbm_collection
 			$clauses[] = $fields[$i].'='.$final[$i];
 		}
 		$sql .= implode(',',$clauses);
-		$sql .= $this->__build_filters();
+		$sql .= ' where '.$this->__fields[0]->name.'='.$this->__data[$this->__fields[0]->name];
 		return $sql;
 	}
 	
